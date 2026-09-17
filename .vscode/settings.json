@@ -3,5 +3,5 @@
     "files.autoSave": "afterDelay",
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
-    "chat.disableAIFeatures": true
+    "chat.disableAIFeatures": false
 }
