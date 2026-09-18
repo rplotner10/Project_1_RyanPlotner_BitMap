@@ -70,7 +70,7 @@ public class Pixels{
      * I also used the Integer.toHexString() method to convert the RGB values to hex.
      * I added a check to see if the value is less than 16, and if it was, added a 0 to the front of the value.
      */
-    
+
     public String toStringHex() {
      StringBuilder builder = new StringBuilder();
      builder.append("#");
@@ -99,6 +99,54 @@ public class Pixels{
 
     }*/
 
-class Icon{
-    private int 
+class Icon {
+    //Created a private 2D ArrayList hold the Pixel objects
+    private ArrayList<ArrayList<Pixels>> pixels;
+
+    //I made a constructor that initializes the 2D ArrayList with pixel objects 
+    public Icon() {
+        pixels = new ArrayList<ArrayList<Pixels>>();
+    
+    for (int i = 0; i < 40; i++ ) {
+        ArrayList<Pixels> row = new ArrayList<Pixels>();
+
+        for (int j = 0; j < 40; j++){
+            row.add(new Pixels(0, 0, 0));
+        }
+        pixels.add(row);
+        }
+    }
+    public Icon(int rows, int cols) {
+        pixels = new ArrayList<ArrayList<Pixels>>();
+
+        for (int i = 0; i < rows; i++ ) {
+            ArrayList<Pixels> row = new ArrayList<Pixels>();
+
+            for (int j = 0; j < cols; j++){
+                row.add(new Pixels(0, 0, 0));
+        }
+        pixels.add(row);
+        }
+        
+    }
+
+    public void setPixel(int row, int col, Pixels pixel) {
+        
+    }
+
+    //bounds checker
+
+    //Nested arraylist's of pixel.
+
+    //Initialize all pixels to black. (I think we did already double check this)
+
+    public String toString() {
+
+    }
+
+    public void createBitmap() {
+
+    }
+
+
 }
