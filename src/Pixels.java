@@ -1,6 +1,12 @@
 import java.util.ArrayList;
 
 public class Pixels{
+    //Constructor that sets the RGB values.
+    public Pixels(int r, int g, int b){
+        setRed(r);
+        setGreen(g);
+        setBlue(b);
+    }
     //Created a private int variable to hold the RGB value instead of having seperate values (RGB).
     private int rgb = 0;
 
@@ -134,8 +140,8 @@ class Icon {
         return pixels.get(row).get(col);
     }
     //Sets the pixel at a specific row and column to the pixel object passed in by reference.
-    public void setPixel(int row, int col, Pixels pixel) {
-        pixels.get(row).set(col, pixel);
+    public void setPixel(int row, int col, int r, int g, int b) {
+        pixels.get(row).set(col, new Pixels(r, g, b));
     }
 
 
@@ -191,12 +197,19 @@ class Icon {
         }
         return result;
     }
-
-    public void createBitmap() {
+    public void convertLittleEndian2 (int val, ArrayList<Byte>){
+        fileBytes.add((byte)val);
+        fileBytes.add((byte)val>>8);
+        fileBytes.add((byte)(val>>16));
+        fileBytes.add((byte)(val>>24));
+    }
+    public void createBitmapFile() {
     //Calculate file size
     int width = pixels.get(0).size();
     int height = pixels.size();
-    int fileSize = 
+    //int fileSize = 
+
+
 
 
     }
