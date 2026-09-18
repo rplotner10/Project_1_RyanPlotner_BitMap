@@ -129,22 +129,75 @@ class Icon {
         }
         
     }
-
+    //Gets pixel at a specific row w/ column then returns it.
+    public Pixels getPixel(int row, int col) {
+        return pixels.get(row).get(col);
+    }
+    //Sets the pixel at a specific row and column to the pixel object passed in by reference.
     public void setPixel(int row, int col, Pixels pixel) {
-        
+        pixels.get(row).set(col, pixel);
     }
 
-    //bounds checker
 
-    //Nested arraylist's of pixel.
+    public void setRed(int row, int col, int red) {
+        if (row >= 0 && row < pixels.size() && col >= 0 && col < pixels.get(row).size()) {
+            Pixels pixel = pixels.get(row).get(col);
+            pixel.setRed(red);
+        }
+    }
+    public void setGreen(int row, int col, int green) {
+        if (row >= 0 && row < pixels.size() && col >= 0 && col < pixels.get(row).size()) {
+            Pixels pixel = pixels.get(row).get(col);
+            pixel.setGreen(green);
+        }
+    }
+    public void setBlue(int row, int col, int blue) {
+        if (row >= 0 && row < pixels.size() && col >= 0 && col < pixels.get(row).size()) {
+            Pixels pixel = pixels.get(row).get(col);
+            pixel.setBlue(blue);
+        }
+    }
 
-    //Initialize all pixels to black. (I think we did already double check this)
+    public int getRed(int row, int col){
+        if (row >= 0 && row < pixels.size() && col >= 0 && col < pixels.get(row).size()) {
+            Pixels pixel = pixels.get(row).get(col);
+            return pixel.getRed();
+        }
+        //I added this return to return an invalid value if the row and col are out of bounds.
+        return -1;
+    }
+    public int getGreen(int row, int col){
+        if (row >= 0 && row < pixels.size() && col >= 0 && col < pixels.get(row).size()) {
+            Pixels pixel = pixels.get(row).get(col);
+            return pixel.getGreen();
+        }
+        return -1;
+    }
+    public int getBlue(int row, int col){
+        if (row >= 0 && row < pixels.size() && col >= 0 && col < pixels.get(row).size()) {
+            Pixels pixel = pixels.get(row).get(col);
+            return pixel.getBlue();
+        }
+        return -1;
+    }
 
     public String toString() {
-
+       String result = "";
+       for (int i = 0; i < pixels.size(); i++) {
+            for (int j = 0; j < pixels.get(i).size(); j++) {
+                result += pixels.get(i).get(j).toStringHex() + " ";
+            }
+            result += "\n";
+        }
+        return result;
     }
 
     public void createBitmap() {
+    //Calculate file size
+    int width = pixels.get(0).size();
+    int height = pixels.size();
+    int fileSize = 
+
 
     }
 
