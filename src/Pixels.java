@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class Pixels{
     //Constructor that sets the RGB values.
@@ -204,7 +206,7 @@ class Icon {
         fileBytes.add((byte)(val>>24));
     }
 
-    public void createBitmapFile() {
+    public void createBitmapFile(String filename) {
     //Calculate file size
     int width = pixels.get(0).size();
     int height = pixels.size();
@@ -299,10 +301,15 @@ class Icon {
     for (int i = 0; i < padding; i++){
         fileBytes.add((byte)0);
     }
+
+    try (FileOutputStream fos = new FileOutputStream(filename)){
+        for (byte b : fileBytes){
+            fos.write(b);
+        }
+    } catch (IOException e){
+    e.printStackTrace();
+    }
   }
-
-
-  
 }
 
     
