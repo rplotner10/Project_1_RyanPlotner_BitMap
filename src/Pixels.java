@@ -41,7 +41,7 @@ public class Pixels{
         //I cleared the green value from the rgb variable and set it to the new value.
         //I also used bitwise operators to put the new value in the correct position of 8.
         //8-15 bits are green.
-        rgb = (rgb & 0xFF00FF00) | ((g & 0xFF) << 8);
+        rgb = (rgb & 0xFFFF00FF) | ((g & 0xFF) << 8);
     }
     //Will return between 0 - 255 
     public int getGreen(){
@@ -59,7 +59,7 @@ public class Pixels{
         //I cleared the blue value from the rgb variable and set it to the new value.
         //I also used bitwise operators to put the new value in the correct position of 16.
         //16-23 bits are blue.
-        rgb = (rgb & 0xFFFF00FF) | ((b & 0xFF) << 16);
+        rgb = (rgb & 0xFF00FFFF) | ((b & 0xFF) << 16);
     }  
     //will return between 0 - 255
     public int getBlue(){
@@ -200,10 +200,10 @@ class Icon {
         return result;
     }
     public void convertLittleEndian2 (int val, ArrayList<Byte> fileBytes) {
-        fileBytes.add((byte)val);
-        fileBytes.add((byte)val>>8);
-        fileBytes.add((byte)(val>>16));
-        fileBytes.add((byte)(val>>24));
+        fileBytes.add((byte)(val & 0xFF));
+        fileBytes.add((byte)((val >> 8) & 0xFF));
+        fileBytes.add((byte)((val >> 16) & 0xFF));
+        fileBytes.add((byte)((val >> 24) & 0xFF));
     }
 
     public void createBitmapFile(String filename) {
@@ -295,11 +295,10 @@ class Icon {
             fileBytes.add((byte)p.getGreen());
             fileBytes.add((byte)p.getRed());
         }
-    }
-
-    //padding bytes
-    for (int i = 0; i < padding; i++){
-        fileBytes.add((byte)0);
+        //padding bytes
+            for (int i = 0; i < padding; i++){
+                fileBytes.add((byte)0);
+            }
     }
 
     try (FileOutputStream fos = new FileOutputStream(filename)){
