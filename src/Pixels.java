@@ -197,22 +197,113 @@ class Icon {
         }
         return result;
     }
-    public void convertLittleEndian2 (int val, ArrayList<Byte>){
+    public void convertLittleEndian2 (int val, ArrayList<Byte> fileBytes) {
         fileBytes.add((byte)val);
         fileBytes.add((byte)val>>8);
         fileBytes.add((byte)(val>>16));
         fileBytes.add((byte)(val>>24));
     }
+
     public void createBitmapFile() {
     //Calculate file size
     int width = pixels.get(0).size();
     int height = pixels.size();
-    //int fileSize = 
+    int fileSize = 54 + ((width * 3 + (4 - (width * 3) % 4) % 4) * height);
+    int bytesPerPixel = 3;
+    int rowSizeWithoutPadding = width * 3;
+    int padding = (4 - (rowSizeWithoutPadding % 4)) % 4;
+    int imageSize = (rowSizeWithoutPadding + padding) * height;
+    int rowSize = rowSizeWithoutPadding + padding;
+    int pixelDataOffset = 54;
+
+    ArrayList<Byte> fileBytes = new ArrayList<Byte>();
+    //convertLittleEndian2(fileSize, fileSizeBytes);
+
+    //Here is where I wrote the 14 byte header
+    //Going off the layout presented in class, I was able to write the header layout.
+    //These first 2 reserved bytes are the signature for a bitmap file essentially.
+    fileBytes.add((byte) 'B');
+    fileBytes.add((byte) 'M');
+    //The next 4 bytes I wrote are in little endian format. Bitwise operations helped bitshifting to correct order.
+    fileBytes.add((byte) (fileSize & 0xFF));
+    fileBytes.add((byte) ((fileSize >> 8) & 0xFF));
+    fileBytes.add((byte) ((fileSize >> 16) & 0xFF));
+    fileBytes.add((byte) ((fileSize >> 24) & 0xFF));
+    //The next 4 bytes are reserved and set to 0.
+    fileBytes.add((byte)0);
+    fileBytes.add((byte)0);
+    fileBytes.add((byte)0);
+    fileBytes.add((byte)0);
+    //The next 4 were tricky, but they just offset the pixel data from the start of the file.
+    fileBytes.add((byte) (54 & 0xFF));
+    fileBytes.add((byte) ((54 >> 8) & 0xFF));
+    fileBytes.add((byte) ((54 >> 16) & 0xFF));
+    fileBytes.add((byte) ((54 >> 24) & 0xFF));
 
 
+    //Here is where I wrote the 40 byte DIB header
 
+    fileBytes.add((byte) (40 & 0xFF));
+    fileBytes.add((byte) ((40 >> 8) & 0xFF));
+    fileBytes.add((byte) ((40 >> 16) & 0xFF));
+    fileBytes.add((byte) ((40 >> 24) & 0xFF));
 
+    fileBytes.add((byte) width);
+    fileBytes.add((byte) (width >> 8));
+    fileBytes.add((byte) (width >> 16));
+    fileBytes.add((byte) (width >> 24));
+
+    fileBytes.add((byte) height);
+    fileBytes.add((byte) (height >> 8));
+    fileBytes.add((byte) (height >> 16));
+    fileBytes.add((byte) (height >> 24));
+
+    fileBytes.add((byte) 1);
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 24);
+    fileBytes.add((byte) 0);
+
+    fileBytes.add((byte) imageSize);
+    fileBytes.add((byte) (imageSize >> 8));
+    fileBytes.add((byte) (imageSize >> 16));
+    fileBytes.add((byte) (imageSize >> 24));
+
+    //
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+
+    //
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+    
+
+    //Wrote pixel data with a nested for loop
+    //It's nested because I wanted it to go through each col and row of the 2D arraylist.
+    //The first line I used -- because the bitmap file stores the pixel data upside down.
+    for (int row = height - 1; row >= 0; row--){ 
+        for (int col = 0; col < width; col++){
+            Pixels p = pixels.get(row).get(col);
+
+            //I used BGR because it has to be backwards for the file format.
+            fileBytes.add((byte)p.getBlue());
+            fileBytes.add((byte)p.getGreen());
+            fileBytes.add((byte)p.getRed());
+        }
     }
 
+    //padding bytes
+    for (int i = 0; i < padding; i++){
+        fileBytes.add((byte)0);
+    }
+  }
 
+
+  
 }
+
+    
+
