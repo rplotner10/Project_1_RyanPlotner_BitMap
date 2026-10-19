@@ -1,5 +1,5 @@
 
-public class Pixels{
+class Pixels{
     //Constructor that sets the RGB values.
     public Pixels(int r, int g, int b){
         setRed(r);

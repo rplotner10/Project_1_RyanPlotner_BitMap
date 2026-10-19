@@ -1,16 +1,23 @@
 
 public class Driver {
     public static void main(String[] args) {
-        //create an icon
-        Icon icon = new Icon(2, 2);
-        
-        icon.setPixel(0, 0, 0, 0, 255); //blue
-        icon.setPixel(0, 1, 0, 255, 0); //green
-        icon.setPixel(1, 0, 255, 0, 0); //red
-        icon.setPixel(1, 1, 255, 255, 255); //white
-    
-        //save the icon as a bitmap file in the current working directory
-        //icon.createBitmapFile(filename)
+        //Create a 5x5 icon 
+         Icon icon = new Icon(5, 5);
+
+        //Top-left would be red
+        icon.setPixel(0, 0, 255, 0, 0);
+
+        //Top-right would be green
+        icon.setPixel(0, 4, 0, 255, 0);
+
+        // Bottom-left would be blue
+        icon.setPixel(4, 0, 0, 0, 255);
+
+        //The black pixel would be bottom-right too but we put nothing in it.
+        System.out.println(icon);
+
         icon.createBitmapFile("icon.bmp");
+
+       
     }
 }

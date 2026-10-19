@@ -134,46 +134,64 @@ class Icon {
     fileBytes.add((byte) ((54 >> 16) & 0xFF));
     fileBytes.add((byte) ((54 >> 24) & 0xFF));
 
-
     //Here is where I wrote the 40 byte DIB header.
     //The first 4 bytes are the size of the DIB header. (40 bytes)
     fileBytes.add((byte) (40 & 0xFF));
     fileBytes.add((byte) ((40 >> 8) & 0xFF));
     fileBytes.add((byte) ((40 >> 16) & 0xFF));
     fileBytes.add((byte) ((40 >> 24) & 0xFF));
-
+    
+    //The next 4 bytes are the width of the image in pixels.
     fileBytes.add((byte) width);
     fileBytes.add((byte) (width >> 8));
     fileBytes.add((byte) (width >> 16));
     fileBytes.add((byte) (width >> 24));
-
+    //The next 4 bytes are the height of the image in pixels.
     fileBytes.add((byte) height);
     fileBytes.add((byte) (height >> 8));
     fileBytes.add((byte) (height >> 16));
     fileBytes.add((byte) (height >> 24));
-
+    // The next 2 bytes are the number of color planes which is 1.
     fileBytes.add((byte) 1);
     fileBytes.add((byte) 0);
+    // The next 2 bytes are the number of bits per pixel which is 24 for a 24-bit bitmap.
+    // Bits per pixel (24-bit)
     fileBytes.add((byte) 24);
     fileBytes.add((byte) 0);
 
+    // The next 4 bytes are the compression method which is 0 for no compression.
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+
+    // The next 4 bytes are the size of the raw bitmap data which also does include padding.
     fileBytes.add((byte) imageSize);
     fileBytes.add((byte) (imageSize >> 8));
     fileBytes.add((byte) (imageSize >> 16));
     fileBytes.add((byte) (imageSize >> 24));
 
-    //
+    //This would be the horizontal resolution
     fileBytes.add((byte) 0);
     fileBytes.add((byte) 0);
     fileBytes.add((byte) 0);
     fileBytes.add((byte) 0);
 
-    //
+    //This would also be the vertical resolution
     fileBytes.add((byte) 0);
     fileBytes.add((byte) 0);
     fileBytes.add((byte) 0);
     fileBytes.add((byte) 0);
-    
+
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
+    fileBytes.add((byte) 0);
 
     //Wrote pixel data with a nested for loop
     //It's nested because I wanted it to go through each col and row of the 2D arraylist.
