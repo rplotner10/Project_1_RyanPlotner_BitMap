@@ -16,5 +16,14 @@ public class PButton extends JButton {
         setBackground(new Color(pixel.getRed(), pixel.getGreen(), pixel.getBlue()));
     }
 
+    //Getters for row and column
+    public int getRow(){
+    return row;
+    }
+
+    public int getCol(){
+    return col;
+    }
+
     
 }

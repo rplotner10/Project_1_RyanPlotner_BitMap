@@ -18,6 +18,7 @@ public class Driver {
 
         icon.createBitmapFile("icon.bmp");
 
-       
+       //open the GUI
+        new BitmapGUI();
     }
 }
