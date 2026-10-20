@@ -52,23 +52,19 @@ public class BitmapGUI extends JFrame {
                     //Get the pixel associated with the clicked button
                     Pixels clickedPixel = bitmap.getPixel(button.getRow(), button.getCol());
 
-                    //Here,ask for new RGB values
-                    String redInput = JOptionPane.showInputDialog(this, "Enter the red value (0-255):");
-                    String greenInput = JOptionPane.showInputDialog(this, "Enter the green value (0-255):");
-                    String blueInput = JOptionPane.showInputDialog(this, "Enter the blue value (0-255):");
-
-                    //Parse the user input to integers
-                    int red = Integer.parseInt(redInput);
-                    int green = Integer.parseInt(greenInput);
-                    int blue = Integer.parseInt(blueInput);
+                    //Use the sliders to get the RGB values for the pixel
+                    int redSliderValue = redSlider.getValue();
+                    int greenSliderValue = greenSlider.getValue();
+                    int blueSliderValue = blueSlider.getValue();     
+                    
 
                     //Set the new RGB values for the pixel
-                    clickedPixel.setRed(red);
-                    clickedPixel.setGreen(green);
-                    clickedPixel.setBlue(blue);
+                    clickedPixel.setRed(redSliderValue);
+                    clickedPixel.setGreen(greenSliderValue);
+                    clickedPixel.setBlue(blueSliderValue);
 
                     //Update the button's background color like PButton class constructor.
-                    button.setBackground(new Color(clickedPixel.getRed(), clickedPixel.getGreen(), clickedPixel.getBlue()));
+                    button.setBackground(new Color(redSliderValue, greenSliderValue, blueSliderValue));
                 });
             }
         }
