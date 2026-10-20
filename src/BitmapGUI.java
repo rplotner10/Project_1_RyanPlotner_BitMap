@@ -6,11 +6,17 @@ import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.Color;
+import javax.swing.JSlider;
+import javax.swing.JLabel;
 
 public class BitmapGUI extends JFrame {
 
     //create a private Icon that holds bitmap data.
     private Icon bitmap;
+    private JSlider redSlider;
+    private JSlider greenSlider;
+    private JSlider blueSlider;
+    private JPanel colorPreview;
 
     //Constructor for BitmapGUI class
     public BitmapGUI() {
@@ -66,7 +72,37 @@ public class BitmapGUI extends JFrame {
                 });
             }
         }
+
+        //Create sliders for RGB values
+        redSlider = new JSlider(0,255,0);
+        greenSlider = new JSlider(0,255,0);
+        blueSlider = new JSlider(0,255,0);
+
+        //Create a panel to hold the sliders and labels
+        JPanel slidersPanel = new JPanel();
+        slidersPanel.setLayout(new GridLayout(8, 1));
+
+        colorPreview = new JPanel();
+        colorPreview.setBackground(Color.BLACK);
+
+        slidersPanel.add(new JLabel("Red:"));
+        slidersPanel.add(redSlider);
+
+        slidersPanel.add(new JLabel("Green:"));
+        slidersPanel.add(greenSlider);
+
+        slidersPanel.add(new JLabel("Blue:"));
+        slidersPanel.add(blueSlider);
+
+        slidersPanel.add(new JLabel("Color Preview:"));
+        slidersPanel.add(colorPreview);
+
+        //Add the main panel and sliders panel to the JFrame
         add(panel, BorderLayout.CENTER);
+        add(slidersPanel, BorderLayout.EAST);
+
+        
+
         //Do this last so that the GUI is visible after all the components are added and set up.
         setVisible(true);
 
