@@ -78,6 +78,10 @@ public class BitmapGUI extends JFrame {
         greenSlider = new JSlider(0,255,0);
         blueSlider = new JSlider(0,255,0);
 
+        redSlider.addChangeListener(e -> colorPreviewUpdate());
+        greenSlider.addChangeListener(e -> colorPreviewUpdate());
+        blueSlider.addChangeListener(e -> colorPreviewUpdate());
+
         //Create a panel to hold the sliders and labels
         JPanel slidersPanel = new JPanel();
         slidersPanel.setLayout(new GridLayout(8, 1));
@@ -101,10 +105,19 @@ public class BitmapGUI extends JFrame {
         add(panel, BorderLayout.CENTER);
         add(slidersPanel, BorderLayout.EAST);
 
-        
-
         //Do this last so that the GUI is visible after all the components are added and set up.
         setVisible(true);
+
+    }
+
+    //Method to update the color preview panel based on the slider values, so it does not always stay black.
+    private void colorPreviewUpdate(){
+        int red = redSlider.getValue();
+        int green = greenSlider.getValue();
+        int blue = blueSlider.getValue();
+        //Creates a new color object baed on the retreived RGB values
+        Color newColor = new Color(red, green, blue);
+        colorPreview.setBackground(newColor);
 
     }
 
