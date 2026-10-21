@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.Color;
 import javax.swing.JSlider;
 import javax.swing.JLabel;
+import java.util.ArrayList;
 
 public class BitmapGUI extends JFrame {
 
@@ -17,6 +18,9 @@ public class BitmapGUI extends JFrame {
     private JSlider greenSlider;
     private JSlider blueSlider;
     private JPanel colorPreview;
+    private ArrayList<Color> recentColorsList = new ArrayList<>(); 
+    private JPanel recentColorsPanel;
+    private JButton[] recentColorButtons = new JButton[5]; 
 
     //Constructor for BitmapGUI class
     public BitmapGUI() {
@@ -65,6 +69,7 @@ public class BitmapGUI extends JFrame {
 
                     //Update the button's background color like PButton class constructor.
                     button.setBackground(new Color(redSliderValue, greenSliderValue, blueSliderValue));
+                    addToRecentColors(new Color(redSliderValue, greenSliderValue, blueSliderValue));
                 });
             }
         }
@@ -80,7 +85,7 @@ public class BitmapGUI extends JFrame {
 
         //Create a panel to hold the sliders and labels
         JPanel slidersPanel = new JPanel();
-        slidersPanel.setLayout(new GridLayout(8, 1));
+        slidersPanel.setLayout(new GridLayout(10, 1));
 
         colorPreview = new JPanel();
         colorPreview.setBackground(Color.BLACK);
@@ -101,12 +106,60 @@ public class BitmapGUI extends JFrame {
         add(panel, BorderLayout.CENTER);
         add(slidersPanel, BorderLayout.EAST);
 
+        recentColorButtons = new JButton[5];
+
+        recentColorsPanel = new JPanel();
+        recentColorsPanel.setLayout(new GridLayout(1, 5));
+
+        //This loop will create 5 buttons for recent colors
+        for (int i = 0; i < 5; i++) {
+            recentColorButtons[i] = new JButton();
+            //Make the initial button background white
+            recentColorButtons[i].setBackground(Color.WHITE);
+            //Action listener for recent color buttons
+            recentColorButtons[i].addActionListener(e -> {
+                JButton sourceButton = (JButton) e.getSource();
+                //Used sourceButton to get the background color of the clicked recent color
+                Color selectedColor = sourceButton.getBackground();
+                redSlider.setValue(selectedColor.getRed());
+                greenSlider.setValue(selectedColor.getGreen());
+                blueSlider.setValue(selectedColor.getBlue());
+            });
+            recentColorsPanel.add(recentColorButtons[i]);
+            slidersPanel.add(new JLabel("Recent Colors:"));
+            slidersPanel.add(recentColorsPanel);
+        }
+
         //Do this last so that the GUI is visible after all the components are added and set up.
         setVisible(true);
 
     }
 
-    //Method to update the color preview panel based on the slider values, so it does not always stay black.
+    private void addToRecentColors(Color color) {
+        //Simply removes color in list if there is a found duplicate
+        recentColorsList.remove(color);
+
+        recentColorsList.add(0, color); //Add the new color to the front of the list (Preference for me)
+
+        if (recentColorsList.size() > 5) {
+            recentColorsList.remove(recentColorsList.size() - 1); //Remove the oldest color if the list exceeds 5. Data management
+        }
+
+        updateRecentColorsPanel();
+    }
+
+    private void updateRecentColorsPanel() {
+        for (int i = 0; i < 5; i++) {
+            if (i < recentColorsList.size()) {
+                recentColorButtons[i].setBackground(recentColorsList.get(i));
+            } else {
+                recentColorButtons[i].setBackground(Color.WHITE);
+                recentColorButtons[i].setEnabled(false);
+            }
+        }
+    }
+
+    //Method to update the color preview panel based on the slider values, so it does not stay black.
     private void colorPreviewUpdate(){
         int red = redSlider.getValue();
         int green = greenSlider.getValue();
