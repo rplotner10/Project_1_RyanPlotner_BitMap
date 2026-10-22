@@ -4,11 +4,12 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
 import java.awt.Color;
 import javax.swing.JSlider;
 import javax.swing.JLabel;
 import java.util.ArrayList;
+import javax.swing.JFileChooser;
+import java.io.File;
 
 public class BitmapGUI extends JFrame {
 
@@ -85,7 +86,7 @@ public class BitmapGUI extends JFrame {
 
         //Create a panel to hold the sliders and labels
         JPanel slidersPanel = new JPanel();
-        slidersPanel.setLayout(new GridLayout(10, 1));
+        slidersPanel.setLayout(new GridLayout(11, 1));
 
         colorPreview = new JPanel();
         colorPreview.setBackground(Color.BLACK);
@@ -101,10 +102,6 @@ public class BitmapGUI extends JFrame {
 
         slidersPanel.add(new JLabel("Color Preview:"));
         slidersPanel.add(colorPreview);
-
-        //Add the main panel and sliders panel to the JFrame
-        add(panel, BorderLayout.CENTER);
-        add(slidersPanel, BorderLayout.EAST);
 
         recentColorButtons = new JButton[5];
 
@@ -126,9 +123,24 @@ public class BitmapGUI extends JFrame {
                 blueSlider.setValue(selectedColor.getBlue());
             });
             recentColorsPanel.add(recentColorButtons[i]);
-            slidersPanel.add(new JLabel("Recent Colors:"));
-            slidersPanel.add(recentColorsPanel);
         }
+        //Literally just adding a label on the panel
+        slidersPanel.add(new JLabel("Recent Colors:"));
+        slidersPanel.add(recentColorsPanel);
+
+        //Create the save button
+        JButton saveButton = new JButton("Save BitMap");
+
+        //Create a file chooser 
+        JFileChooser fileSelector = new JFileChooser();
+        //Action listener for the save button will file choosing.
+        saveButton.addActionListener(e -> showSaveDialog(fileSelector));
+        //Add the save button to the sliders panel
+        slidersPanel.add(saveButton);
+
+        //Add the main panel and sliders panel to the JFrame
+        add(panel, BorderLayout.CENTER);
+        add(slidersPanel, BorderLayout.EAST);
 
         //Do this last so that the GUI is visible after all the components are added and set up.
         setVisible(true);
@@ -154,12 +166,12 @@ public class BitmapGUI extends JFrame {
                 recentColorButtons[i].setBackground(recentColorsList.get(i));
             } else {
                 recentColorButtons[i].setBackground(Color.WHITE);
-                recentColorButtons[i].setEnabled(false);
+                recentColorButtons[i].setEnabled(true);
             }
         }
     }
 
-    //Method to update the color preview panel based on the slider values, so it does not stay black.
+    //Update the color preview panel based on the slider values, so it does not stay black.
     private void colorPreviewUpdate(){
         int red = redSlider.getValue();
         int green = greenSlider.getValue();
@@ -169,5 +181,12 @@ public class BitmapGUI extends JFrame {
         colorPreview.setBackground(newColor);
 
     }
-
+    //This method will show the save dialog and handle the file saving process
+    private void showSaveDialog(JFileChooser fileSelector) {
+        int userSelection = fileSelector.showSaveDialog(this);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileSelector.getSelectedFile();
+            bitmap.createBitmapFile(fileToSave.getAbsolutePath());
+        }
+    }
 }
