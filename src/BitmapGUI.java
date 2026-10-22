@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import java.io.File;
+import javax.swing.JCheckBox;
 
 public class BitmapGUI extends JFrame {
 
@@ -45,16 +46,24 @@ public class BitmapGUI extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(rows, cols));
         
+        //Create a checkbox for advanced options
+        JCheckBox advancedOptions = new JCheckBox("Advanced Options");
+
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 Pixels pixel = bitmap.getPixel(i, j );
                 PButton button = new PButton(pixel, i, j);
                 panel.add(button);
-
+    
                 //Here is the action listener to listen for the button clicks.
                 button.addActionListener(e -> {
 
+                    if (advancedOptions.isSelected()){
+                        JOptionPane.showMessageDialog(this, "Advanced options are not made yet!");
+                    }
+
                     //Get the pixel associated with the clicked button
+                    else {
                     Pixels clickedPixel = bitmap.getPixel(button.getRow(), button.getCol());
 
                     //Use the sliders to get the RGB values for the pixel
@@ -71,6 +80,7 @@ public class BitmapGUI extends JFrame {
                     //Update the button's background color like PButton class constructor.
                     button.setBackground(new Color(redSliderValue, greenSliderValue, blueSliderValue));
                     addToRecentColors(new Color(redSliderValue, greenSliderValue, blueSliderValue));
+                    }
                 });
             }
         }
@@ -86,7 +96,7 @@ public class BitmapGUI extends JFrame {
 
         //Create a panel to hold the sliders and labels
         JPanel slidersPanel = new JPanel();
-        slidersPanel.setLayout(new GridLayout(11, 1));
+        slidersPanel.setLayout(new GridLayout(12, 1));
 
         colorPreview = new JPanel();
         colorPreview.setBackground(Color.BLACK);
@@ -137,6 +147,10 @@ public class BitmapGUI extends JFrame {
         saveButton.addActionListener(e -> showSaveDialog(fileSelector));
         //Add the save button to the sliders panel
         slidersPanel.add(saveButton);
+
+        //Add a checkbox for advanced options
+        slidersPanel.add(advancedOptions);
+
 
         //Add the main panel and sliders panel to the JFrame
         add(panel, BorderLayout.CENTER);
