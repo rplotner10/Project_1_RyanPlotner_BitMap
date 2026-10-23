@@ -1,6 +1,8 @@
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
@@ -11,6 +13,8 @@ import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import java.io.File;
 import javax.swing.JCheckBox;
+import java.awt.image.BufferedImage;
+
 
 public class BitmapGUI extends JFrame {
 
@@ -79,8 +83,41 @@ public class BitmapGUI extends JFrame {
                             }
                             
                          } else if (choice == 1) {
-                            
+                            JFileChooser fileSelector = new JFileChooser();
 
+                            int userSelection = fileSelector.showOpenDialog(this);
+
+                            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                                File fileToOpen = fileSelector.getSelectedFile();
+
+                                try {
+                                     BufferedImage importedImage =
+                                     ImageIO.read(fileToOpen);
+
+                                    if (importedImage == null) {
+                                        JOptionPane.showMessageDialog(this,"Please select a valid image file.");
+                                    } else {
+                                    //Preview the imported image 
+                                    JLabel imagePreview = new JLabel(
+                                        new javax.swing.ImageIcon(importedImage)
+                                    );
+
+                                    JScrollPane previewScrollPane = new JScrollPane(imagePreview);
+                                    previewScrollPane.setPreferredSize(new java.awt.Dimension(400, 300));
+
+                                    int confirm = JOptionPane.showConfirmDialog(this,previewScrollPane,"Import Preview",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
+
+                                    if (confirm == JOptionPane.OK_OPTION) {
+                                             // We'll copy the image pixels here in the next step.
+                                        }
+
+                                    }
+
+                                } catch (java.io.IOException ex) {
+                                        JOptionPane.showMessageDialog(this,"Could not read the selected image.");
+    
+                                }
+                            }
                          }
                     }
 
