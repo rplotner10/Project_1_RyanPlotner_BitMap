@@ -59,7 +59,29 @@ public class BitmapGUI extends JFrame {
                 button.addActionListener(e -> {
 
                     if (advancedOptions.isSelected()){
-                        JOptionPane.showMessageDialog(this, "Advanced options are not made yet!");
+                        String[] options = {"Fill", "Import", "Cancel"};
+
+                        int choice = JOptionPane.showOptionDialog(this, "Choose what you would like to do:",
+                         "Advanced Options", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+                         if (choice == 0) {
+                            //get the selected rgb color from the sliders
+                            int red = redSlider.getValue();
+                            int green = greenSlider.getValue();
+                            int blue = blueSlider.getValue();
+
+                            for (int row = button.getRow(); row < rows; row++) {
+                                for (int col = button.getCol(); col < cols; col++) {
+                                    bitmap.setPixel(row, col, red, green, blue);
+                                    PButton pixelButton = (PButton) panel.getComponent(row * cols + col);
+                                    pixelButton.setBackground(new Color(red, green, blue));
+                                }
+                            }
+                            
+                         } else if (choice == 1) {
+                            
+
+                         }
                     }
 
                     //Get the pixel associated with the clicked button
