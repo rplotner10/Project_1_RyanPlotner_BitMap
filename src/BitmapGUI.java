@@ -69,80 +69,86 @@ public class BitmapGUI extends JFrame {
                          "Advanced Options", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
                          if (choice == 0) {
-                            //get the selected rgb color from the sliders
+                            //Ask the user how many rows and columns to fill
+                            String rowsToFillInput = JOptionPane.showInputDialog(this, "Rows: ");
+                            if (rowsToFillInput == null) {
+                                return; //User cancelled with button
+                            }
+
+                        String colsToFillInput = JOptionPane.showInputDialog(this, "Columns: ");
+
+                        if (colsToFillInput == null) {
+                            return; //User cancelled with button
+                        }
+
+                        try {
+                            int rowsToFill = Integer.parseInt(rowsToFillInput);
+                            int colsToFill = Integer.parseInt(colsToFillInput);
+                            //Error message
+                            if (rowsToFill <= 0 || colsToFill <= 0) {
+                                JOptionPane.showMessageDialog(this, "Rows and columns must be greater than 0!");
+                            } else {
+                            //Get the selected color from the RGB sliders
                             int red = redSlider.getValue();
                             int green = greenSlider.getValue();
                             int blue = blueSlider.getValue();
 
-                            for (int row = button.getRow(); row < rows; row++) {
-                                for (int col = button.getCol(); col < cols; col++) {
+                            Color fillColor = new Color(red, green, blue);
+
+                            //Remember the pixel where the user clicked
+                            int startRow = button.getRow();
+                            int startCol = button.getCol();
+
+                            //Stop at the edges if necessary
+                            //Use math to make sure we don't go out of bounds
+                            int endRow = Math.min(rows, startRow + rowsToFill);
+                            int endCol = Math.min(cols, startCol + colsToFill);
+
+                            //Fill the entered in area
+                            for (int row = startRow; row < endRow; row++) {
+                                for (int col = startCol; col < endCol; col++) {
                                     bitmap.setPixel(row, col, red, green, blue);
-                                    PButton pixelButton = (PButton) panel.getComponent(row * cols + col);
-                                    pixelButton.setBackground(new Color(red, green, blue));
+
+                                    PButton pixelButton = (PButton)
+                                    panel.getComponent(row * cols + col);
+
+                                    pixelButton.setBackground(fillColor);
                                 }
                             }
-                            
-                         } else if (choice == 1) {
-                            JFileChooser fileSelector = new JFileChooser();
 
-                            int userSelection = fileSelector.showOpenDialog(this);
-
-                            if (userSelection == JFileChooser.APPROVE_OPTION) {
-                                File fileToOpen = fileSelector.getSelectedFile();
-
-                                try {
-                                     BufferedImage importedImage =
-                                     ImageIO.read(fileToOpen);
-
-                                    if (importedImage == null) {
-                                        JOptionPane.showMessageDialog(this,"Please select a valid image file.");
-                                    } else {
-                                    //Preview the imported image 
-                                    JLabel imagePreview = new JLabel(
-                                        new javax.swing.ImageIcon(importedImage)
-                                    );
-
-                                    JScrollPane previewScrollPane = new JScrollPane(imagePreview);
-                                    previewScrollPane.setPreferredSize(new java.awt.Dimension(400, 300));
-
-                                    int confirm = JOptionPane.showConfirmDialog(this,previewScrollPane,"Import Preview",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
-
-                                    if (confirm == JOptionPane.OK_OPTION) {
-                                             // We'll copy the image pixels here in the next step.
-                                        }
-
-                                    }
-
-                                } catch (java.io.IOException ex) {
-                                        JOptionPane.showMessageDialog(this,"Could not read the selected image.");
-    
-                                }
-                            }
-                         }
+                            // Add the color to the recent colors list
+                            addToRecentColors(fillColor);
+                        }
                     }
-
-                    //Get the pixel associated with the clicked button
-                    else {
-                    Pixels clickedPixel = bitmap.getPixel(button.getRow(), button.getCol());
-
-                    //Use the sliders to get the RGB values for the pixel
-                    int redSliderValue = redSlider.getValue();
-                    int greenSliderValue = greenSlider.getValue();
-                    int blueSliderValue = blueSlider.getValue();     
-                    
-
-                    //Set the new RGB values for the pixel
-                    clickedPixel.setRed(redSliderValue);
-                    clickedPixel.setGreen(greenSliderValue);
-                    clickedPixel.setBlue(blueSliderValue);
-
-                    //Update the button's background color like PButton class constructor.
-                    button.setBackground(new Color(redSliderValue, greenSliderValue, blueSliderValue));
-                    addToRecentColors(new Color(redSliderValue, greenSliderValue, blueSliderValue));
-                    }
-                });
+                        
+            catch (NumberFormatException ex){
+                    JOptionPane.showMessageDialog(this, "Please enter valid whole numbers.");
+                }
             }
         }
+
+                    //Get the pixel associated with the clicked button
+            else {
+                  Pixels clickedPixel = bitmap.getPixel(button.getRow(), button.getCol());
+
+                  //Use the sliders to get the RGB values for the pixel
+                  int redSliderValue = redSlider.getValue();
+                  int greenSliderValue = greenSlider.getValue();
+                  int blueSliderValue = blueSlider.getValue();     
+                    
+
+                  //Set the new RGB values for the pixel
+                  clickedPixel.setRed(redSliderValue);
+                  clickedPixel.setGreen(greenSliderValue);
+                  clickedPixel.setBlue(blueSliderValue);
+
+                  //Update the button's background color like PButton class constructor.
+                  button.setBackground(new Color(redSliderValue, greenSliderValue, blueSliderValue));
+                  addToRecentColors(new Color(redSliderValue, greenSliderValue, blueSliderValue));
+                }
+            });
+        }
+    }
 
         //Create sliders for RGB values
         redSlider = new JSlider(0,255,0);
@@ -239,7 +245,7 @@ public class BitmapGUI extends JFrame {
                 recentColorButtons[i].setBackground(recentColorsList.get(i));
             } else {
                 recentColorButtons[i].setBackground(Color.WHITE);
-                recentColorButtons[i].setEnabled(true);
+                recentColorButtons[i].setEnabled(false);
             }
         }
     }
