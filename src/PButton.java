@@ -25,5 +25,9 @@ public class PButton extends JButton {
     return col;
     }
 
+    public Pixels getPixel() {
+    return pixel;
+}
+
     
 }

@@ -14,7 +14,8 @@ import javax.swing.JFileChooser;
 import java.io.File;
 import javax.swing.JCheckBox;
 import java.awt.image.BufferedImage;
-
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class BitmapGUI extends JFrame {
 
@@ -57,6 +58,35 @@ public class BitmapGUI extends JFrame {
             for (int j = 0; j < cols; j++) {
                 Pixels pixel = bitmap.getPixel(i, j );
                 PButton button = new PButton(pixel, i, j);
+
+                button.addMouseListener(new MouseListener() {
+                
+                    @Override 
+                    public void mouseEntered(MouseEvent e) {
+
+                    }
+
+                    @Override 
+                    public void mouseExited(MouseEvent e) {
+
+                    }
+
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+
+                    }
+
+                    @Override 
+                    public void mousePressed(MouseEvent e) {
+                        
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        
+                    }
+                });
+
                 panel.add(button);
     
                 //Here is the action listener to listen for the button clicks.
