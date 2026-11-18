@@ -28,6 +28,9 @@ public class BitmapGUI extends JFrame {
     private ArrayList<Color> recentColorsList = new ArrayList<>(); 
     private JPanel recentColorsPanel;
     private JButton[] recentColorButtons = new JButton[5]; 
+    private IconEdit iconEdit = IconEdit.getInstance(); //Get the singleton instance of IconEdit
+    private PButton[][] pixelButtons;//Array to hold the pixel buttons for easy access
+    private boolean attached = true;
 
     //Constructor for BitmapGUI class
     public BitmapGUI() {
@@ -42,6 +45,8 @@ public class BitmapGUI extends JFrame {
         //Create a new Icon object with the entered dimensions
         bitmap = new Icon(rows, cols);
 
+        pixelButtons = new PButton[rows][cols];//Initialize the pixel buttons array
+
         //Set up the JFrame
         setTitle("Bitmap GUI");
         setSize(400, 400);
@@ -53,11 +58,26 @@ public class BitmapGUI extends JFrame {
         
         //Create a checkbox for advanced options
         JCheckBox advancedOptions = new JCheckBox("Advanced Options");
+        JCheckBox syncCheckBox = new JCheckBox("Sync Windows", true);
+
+        syncCheckBox.addActionListener(e -> {
+
+        if (syncCheckBox.isSelected()) {
+            attachToIconEdit();
+        } else {
+            detachFromIconEdit();
+        }
+
+        
+
+});
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 Pixels pixel = bitmap.getPixel(i, j );
                 PButton button = new PButton(pixel, i, j);
+
+                pixelButtons[i][j] = button;
 
                 button.addMouseListener(new MouseListener() {
                 
@@ -88,6 +108,7 @@ public class BitmapGUI extends JFrame {
                 });
 
                 panel.add(button);
+                
     
                 //Here is the action listener to listen for the button clicks.
                 button.addActionListener(e -> {
@@ -251,9 +272,45 @@ public class BitmapGUI extends JFrame {
         add(panel, BorderLayout.CENTER);
         add(slidersPanel, BorderLayout.EAST);
 
+        slidersPanel.add(syncCheckBox);
+        iconEdit.attach(this);
         //Do this last so that the GUI is visible after all the components are added and set up.
         setVisible(true);
 
+        
+
+    }
+    //This method will be called by the IconEdit class to update the bitmap when a change occurs. -Observer pattern
+    public void updateEdit(int row, int col, int red, int green, int blue) {
+        //Update the pixels in the bitmap with the observer pattern
+        bitmap.setPixel(row, col, red, green, blue);
+
+        //Update the button's background color to reflect the change
+        pixelButtons[row][col].setBackground(new Color(red, green, blue));
+    }
+
+    //
+    public void attachToIconEdit() {
+        if (!attached) {
+            iconEdit.attach(this);
+            attached = true;
+        }
+    }
+
+    public void detachFromIconEdit() {
+        if (attached) {
+            iconEdit.detach(this);
+            attached = false;
+        }
+    }
+
+    private void sendEdit(int row, int col, Color color) {
+        int red = color.getRed();
+        int green = color.getGreen();
+        int blue = color.getBlue();
+
+        updateEdit(row, col, red, green, blue);
+        iconEdit.notifyObservers(row, col, red, green, blue);
     }
 
     private void addToRecentColors(Color color) {
