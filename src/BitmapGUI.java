@@ -80,10 +80,19 @@ public class BitmapGUI extends JFrame {
                 pixelButtons[i][j] = button;
 
                 button.addMouseListener(new MouseListener() {
-                
+                    
+                    //This method is in charge of when the user holds shift it paints wherever the cursor goes.
                     @Override 
                     public void mouseEntered(MouseEvent e) {
+                        if (e.isShiftDown()) {
+                            PButton hoveredButton = (PButton) e.getSource();
 
+                            Color selectedColor = new Color(redSlider.getValue(), greenSlider.getValue(), blueSlider.getValue());
+
+                            sendEdit(hoveredButton.getRow(), hoveredButton.getCol(), selectedColor);
+
+                            addToRecentColors(selectedColor);
+                        }
                     }
 
                     @Override 
@@ -180,22 +189,16 @@ public class BitmapGUI extends JFrame {
 
                     //Get the pixel associated with the clicked button
             else {
-                  Pixels clickedPixel = bitmap.getPixel(button.getRow(), button.getCol());
+                  Color selectedColor = new Color(
 
                   //Use the sliders to get the RGB values for the pixel
-                  int redSliderValue = redSlider.getValue();
-                  int greenSliderValue = greenSlider.getValue();
-                  int blueSliderValue = blueSlider.getValue();     
-                    
+                  redSlider.getValue(),
+                  greenSlider.getValue(),
+                  blueSlider.getValue()     
+                  );
 
-                  //Set the new RGB values for the pixel
-                  clickedPixel.setRed(redSliderValue);
-                  clickedPixel.setGreen(greenSliderValue);
-                  clickedPixel.setBlue(blueSliderValue);
-
-                  //Update the button's background color like PButton class constructor.
-                  button.setBackground(new Color(redSliderValue, greenSliderValue, blueSliderValue));
-                  addToRecentColors(new Color(redSliderValue, greenSliderValue, blueSliderValue));
+                  sendEdit(button.getRow(), button.getCol(), selectedColor);
+                  addToRecentColors(selectedColor);                 
                 }
             });
         }
