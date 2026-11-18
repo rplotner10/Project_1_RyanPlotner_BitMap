@@ -31,6 +31,7 @@ public class BitmapGUI extends JFrame {
     private static IconEdit iconEdit = IconEdit.getInstance(); //Get the singleton instance of IconEdit
     private PButton[][] pixelButtons;//Array to hold the pixel buttons for easy access
     private boolean attached = true;
+    
 
     //Constructor for BitmapGUI class
     public BitmapGUI() {
@@ -67,8 +68,6 @@ public class BitmapGUI extends JFrame {
         } else {
             detachFromIconEdit();
         }
-
-        
 
 });
 
@@ -273,7 +272,6 @@ public class BitmapGUI extends JFrame {
         newWindowButton.addActionListener(e-> {new BitmapGUI();});
         slidersPanel.add(newWindowButton);
         
-
 
         //Add a checkbox for advanced options
         slidersPanel.add(advancedOptions);
