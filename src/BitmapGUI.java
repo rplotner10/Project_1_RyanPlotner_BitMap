@@ -28,7 +28,7 @@ public class BitmapGUI extends JFrame {
     private ArrayList<Color> recentColorsList = new ArrayList<>(); 
     private JPanel recentColorsPanel;
     private JButton[] recentColorButtons = new JButton[5]; 
-    private IconEdit iconEdit = IconEdit.getInstance(); //Get the singleton instance of IconEdit
+    private static IconEdit iconEdit = IconEdit.getInstance(); //Get the singleton instance of IconEdit
     private PButton[][] pixelButtons;//Array to hold the pixel buttons for easy access
     private boolean attached = true;
 
@@ -267,6 +267,14 @@ public class BitmapGUI extends JFrame {
         //Add the save button to the sliders panel
         slidersPanel.add(saveButton);
 
+        //Create the New Window button
+        JButton newWindowButton = new JButton("New Window");
+        //Action Listener for the button
+        newWindowButton.addActionListener(e-> {new BitmapGUI();});
+        slidersPanel.add(newWindowButton);
+        
+
+
         //Add a checkbox for advanced options
         slidersPanel.add(advancedOptions);
 
@@ -313,7 +321,7 @@ public class BitmapGUI extends JFrame {
         int blue = color.getBlue();
 
         updateEdit(row, col, red, green, blue);
-        iconEdit.notifyObservers(row, col, red, green, blue);
+        iconEdit.notifyObservers(this, row, col, red, green, blue);
     }
 
     private void addToRecentColors(Color color) {

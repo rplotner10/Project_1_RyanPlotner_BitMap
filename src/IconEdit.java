@@ -24,9 +24,12 @@ public class IconEdit {
     }
 
     //Notify all observers of a change in the icon
-    public void notifyObservers(int row, int col, int red, int green, int blue) {
+    public void notifyObservers(BitmapGUI source, int row, int col, int red, int green, int blue) {
         for (BitmapGUI observer : observers) {
             observer.updateEdit(row, col, red, green, blue);
+            if (observer != source){
+                observer.updateEdit(row, col, red, green, blue);
+            }
         }
     }
 
