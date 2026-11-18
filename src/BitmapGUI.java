@@ -31,7 +31,9 @@ public class BitmapGUI extends JFrame {
     private static IconEdit iconEdit = IconEdit.getInstance(); //Get the singleton instance of IconEdit
     private PButton[][] pixelButtons;//Array to hold the pixel buttons for easy access
     private boolean attached = true;
-    
+    private JCheckBox verticalInvertCheckBox;
+    private JCheckBox horizontalInvertCheckBox;
+    private JCheckBox randomColorCheckBox;
 
     //Constructor for BitmapGUI class
     public BitmapGUI() {
@@ -57,9 +59,12 @@ public class BitmapGUI extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(rows, cols));
         
-        //Create a checkbox for advanced options
+        //Create a checkbox for each feature listed:
         JCheckBox advancedOptions = new JCheckBox("Advanced Options");
         JCheckBox syncCheckBox = new JCheckBox("Sync Windows", true);
+        JCheckBox verticalInvertCheckBox = new JCheckBox("Vertical Invert");
+        JCheckBox horizontalInvertCheckBox = new JCheckBox("Horizontal Invert");
+        JCheckBox randomColorCheckBox = new JCheckBox("Random Color");
 
         syncCheckBox.addActionListener(e -> {
 
@@ -281,7 +286,12 @@ public class BitmapGUI extends JFrame {
         add(panel, BorderLayout.CENTER);
         add(slidersPanel, BorderLayout.EAST);
 
+        //Add the different checkbox features to the slidersPanel.
         slidersPanel.add(syncCheckBox);
+        slidersPanel.add(verticalInvertCheckBox);
+        slidersPanel.add(horizontalInvertCheckBox);
+        slidersPanel.add(randomColorCheckBox);
+
         iconEdit.attach(this);
         //Do this last so that the GUI is visible after all the components are added and set up.
         setVisible(true);
