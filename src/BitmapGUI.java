@@ -62,9 +62,7 @@ public class BitmapGUI extends JFrame {
         //Create a checkbox for each feature listed:
         JCheckBox advancedOptions = new JCheckBox("Advanced Options");
         JCheckBox syncCheckBox = new JCheckBox("Sync Windows", true);
-        JCheckBox verticalInvertCheckBox = new JCheckBox("Vertical Invert");
-        JCheckBox horizontalInvertCheckBox = new JCheckBox("Horizontal Invert");
-        JCheckBox randomColorCheckBox = new JCheckBox("Random Color");
+        
 
         syncCheckBox.addActionListener(e -> {
 
@@ -281,6 +279,9 @@ public class BitmapGUI extends JFrame {
         //Add a checkbox for advanced options
         slidersPanel.add(advancedOptions);
 
+        verticalInvertCheckBox = new JCheckBox("Vertical Invert");
+        horizontalInvertCheckBox = new JCheckBox("Horizontal Invert");
+        randomColorCheckBox = new JCheckBox("Random Color");
 
         //Add the main panel and sliders panel to the JFrame
         add(panel, BorderLayout.CENTER);
@@ -291,6 +292,7 @@ public class BitmapGUI extends JFrame {
         slidersPanel.add(verticalInvertCheckBox);
         slidersPanel.add(horizontalInvertCheckBox);
         slidersPanel.add(randomColorCheckBox);
+   
 
         iconEdit.attach(this);
         //Do this last so that the GUI is visible after all the components are added and set up.
@@ -324,12 +326,48 @@ public class BitmapGUI extends JFrame {
     }
 
     private void sendEdit(int row, int col, Color color) {
-        int red = color.getRed();
-        int green = color.getGreen();
-        int blue = color.getBlue();
+        BitMapEdit edit = new BitMapEdit(){
 
-        updateEdit(row, col, red, green, blue);
-        iconEdit.notifyObservers(this, row, col, red, green, blue);
+            @Override 
+            public int getRow(){
+                return row;
+            }
+
+            @Override 
+            public int getCol(){
+                return col;
+            }
+
+            @Override 
+            public Color getColor(){
+                return color;
+            }
+        };
+         //Apply vertical inversion
+        if (verticalInvertCheckBox.isSelected()) {
+            edit = new VerticalInvert(edit, pixelButtons.length);
+        }
+
+        //Apply horizontal inversion
+        if (horizontalInvertCheckBox.isSelected()) {
+            edit = new HorizontalInvert(edit, pixelButtons[0].length);
+        }
+
+        //Apply random color
+        if (randomColorCheckBox.isSelected()) {
+            edit = new RandomColorEdit(edit);
+        }
+
+        //Get the final values of editing.
+        int newRow = edit.getRow();
+        int newCol = edit.getCol();
+        Color newColor = edit.getColor();
+
+        //Update this window.
+        updateEdit(newRow, newCol, newColor.getRed(), newColor.getGreen(), newColor.getBlue());
+
+        //Notify the other windows.
+        iconEdit.notifyObservers(this, newRow, newCol, newColor.getRed(), newColor.getGreen(), newColor.getBlue());
     }
 
     private void addToRecentColors(Color color) {

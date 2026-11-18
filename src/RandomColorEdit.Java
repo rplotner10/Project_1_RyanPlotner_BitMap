@@ -1,13 +1,13 @@
 import java.awt.Color;
 import java.util.Random;
 
-public class RandomColorBitmapEdit implements BitmapEdit {
+public class RandomColorEdit implements BitMapEdit {
 
-    private BitmapEdit edit;
+    private BitMapEdit edit;
     private Random random = new Random();
 
     //Constructor
-    public RandomColorBitmapEdit(BitmapEdit edit) {
+    public RandomColorEdit(BitMapEdit edit) {
         this.edit = edit;
     }
     //Getting values for this should not change for this class

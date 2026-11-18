@@ -1,12 +1,12 @@
 import java.awt.Color;
 
-public class HorizontalInvertBitmapEdit implements BitmapEdit {
+public class HorizontalInvert implements BitMapEdit {
 
-    private BitmapEdit edit;
+    private BitMapEdit edit;
     private int width;
 
     //Constructor
-    public HorizontalInvertBitmapEdit(BitmapEdit edit, int width){
+    public HorizontalInvert(BitMapEdit edit, int width){
         this.edit = edit;
         this.width = width;
     }
